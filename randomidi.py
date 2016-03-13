@@ -84,7 +84,7 @@ def apply_mutation(mutantnotelist, midino, snote=50):
 
 
 
-def read_midi(filename='music/random4.mid', snote=50):
+def read_midi(filename, snote=50):
     
 	mid = MidiFile(filename)
     
@@ -108,18 +108,20 @@ if __name__ == "__main__":
 	mlength = 12
 	snote = 50 # starting note
 	numofmidi = 10 # number of midi files
-	pitch=False # do not include pitch variations for now
 
-	generate_random(snote, mlength, numofmidi, pitch)
+	pitchrnd = False # do not include pitch variations for now
+	timernd = False # do not include time variations for now
+
+	generate_random(snote, mlength, numofmidi, pitchrnd, timernd)
 
 	for j in range(numofmidi):
     
 		midiname = 'music/random' + str(j) + '.mid'
     
-		notelist = read_midi(midiname)
+		notelist = read_midi(midiname, snote)
     
-		mutantnotelist = ga.mutate(notelist)
+		mutantnotelist = ga.mutate(notelist, mlength)
     
-		apply_mutation(mutantnotelist, j)
+		apply_mutation(mutantnotelist, j, snote)
 
-	print('Midi files are created. Please check the "music" folder')
+	print('Midi files are created. Please check the "music" and “mutantmusic” folder')
