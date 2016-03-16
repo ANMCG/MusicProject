@@ -5,39 +5,41 @@ Spyder Editor
 This is a temporary script file.
 """
 from numpy import random
-from fitnessFunction import computeFitnessPitchTransitions as fitness
+from fitnessFunction import computeFitnessCombination as fitness
 
-# define the length of the melody
-mlength=12
-nrOfTones = 11
+def mutateRandom(mlength=12, nrOfTones=11):
+    # define the length of the melody
+    mlength=12
+    nrOfTones = 11
 
-# instantiate some necessary variables    
-bestscore = 0  
-melody = random.randint(0,nrOfTones,mlength)
-bestmelody = list(melody)
-progress = []
-mutaterange=range(nrOfTones)
+    # instantiate some necessary variables
+    bestscore = 0
+    melody = random.randint(0,nrOfTones,mlength)
+    bestmelody = list(melody)
+    progress = []
+    mutaterange=range(nrOfTones)
 
-#each loop decreases the number of mutations per round
-for i in range (0,5):
-#each loop mutates the currentbest, checks it's fitness and updates currentbest   
-    for x in range (0,1000):
-        melody=list(bestmelody)
-        r=random.randint(0,mlength,abs(i-6))
-        for z in r:
-            mutaterangecopy=list(mutaterange)
-            mutaterangecopy.remove(melody[z])
-            melody[z]= random.choice(mutaterangecopy,1)[0]
+    #each loop decreases the number of mutations per round
+    for i in range (0,5):
+    #each loop mutates the currentbest, checks it's fitness and updates currentbest
+        for x in range (0,1000):
+            melody=list(bestmelody)
+            r=random.randint(0,mlength,abs(i-6))
+            for z in r:
+                mutaterangecopy=list(mutaterange)
+                mutaterangecopy.remove(melody[z])
+                melody[z]= random.choice(mutaterangecopy,1)[0]
 
-        currentscore = fitness(melody)
-        if currentscore >= bestscore:
-            bestscore = currentscore
-            bestmelody = list(melody)
+            currentscore = fitness(melody)
+            if currentscore >= bestscore:
+                bestscore = currentscore
+                bestmelody = list(melody)
 
-        progress.append(bestscore)
+            progress.append(bestscore)
 
+    return {'progress': progress, 'bestmelody': bestmelody}
 
-def mutate(notelist, mlength=12):
+def mutate(notelist, mlength=12, nrOfTones=11):
 
    # instantiate some necessary variables
     bestscore = 0
@@ -46,7 +48,7 @@ def mutate(notelist, mlength=12):
     bestmelody = notelist
 
     progress = []
-    mutaterange=range(nrOfTones)
+    mutaterange=list(range(nrOfTones))
 
     #each loop decreases the number of mutations per round
     for i in range (0,5):
@@ -59,7 +61,6 @@ def mutate(notelist, mlength=12):
                 mutaterangecopy=list(mutaterange)
                 mutaterangecopy.remove(melody[z])
                 melody[z]= random.choice(mutaterangecopy,1)[0]
-
 
             currentscore = fitness(melody)
             if currentscore >= bestscore:

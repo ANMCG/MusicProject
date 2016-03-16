@@ -74,6 +74,12 @@ def computeFitnessPitchTransitions(melody):
         fitness= fitness * fitPitchTable[melody[x - 1]][melody[x]]
     return fitness
 
+def computeFitnessPitchTransitions2(melody):
+    fitness = 0
+    for x in range (1,len(melody)-1):
+        fitness= fitness + fitPitchTable[melody[x - 1]][melody[x]]
+    return fitness
+
 ###########################################################################
 
 # TODO
@@ -84,7 +90,12 @@ def computeFitnessPitchTransitions(melody):
 
 def computeFitnessPitchHeight(melody):
     corrMatrix = np.corrcoef(melody, averagePitchHeight)
-    return corrMatrix[1,2]
+    return corrMatrix[0,1]
+
+def computeFitnessCombination(melody, ratio=0.05):
+    fitness1 = computeFitnessPitchTransitions2(melody)
+    fitness2 = 17*computeFitnessPitchHeight(melody)
+    return ratio*fitness2 + (1-ratio)*fitness1
 
 ###########################################################################
 
