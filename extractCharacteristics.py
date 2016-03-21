@@ -11,7 +11,7 @@ import csv
 ## Variables/Parameters 
 modelType = 'firstOrder'    #existing model types: 'flat', 'firstOrder', TODO: create: 'secondOrder', 'prior', 'start', 'end'
 dataSet = 'folk'            #'allFolk', 'folk', 'essenFolk', 'bach'
-directory = 'C:\\Users\\diede\\Documents\\Study\\Master AI\\MusicCognition\\Project\\Data\\'+dataSet+'\\'+modelType+'\\'
+directory = 'data\\'+dataSet+'\\'+modelType+'\\'
 
 if not os.path.exists(directory):
     os.makedirs(directory)

@@ -5,12 +5,17 @@ Spyder Editor
 This is a temporary script file.
 """
 from numpy import random
-from fitnessFunction import computeFitnessCombination as fitness
+import fitness
 
-def mutateRandom(mlength=12, nrOfTones=11):
+#variables! Select type of fitness + which dataset
+modelType = 'firstOrder'
+dataSet = 'folk'
+fit = fitness.Fitness(modelType,dataSet)
+
+def mutateRandom(mlength=12, nrOfTones=12):
     # define the length of the melody
     mlength=12
-    nrOfTones = 11
+    nrOfTones = 12
 
     # instantiate some necessary variables
     bestscore = 0
@@ -30,7 +35,7 @@ def mutateRandom(mlength=12, nrOfTones=11):
                 mutaterangecopy.remove(melody[z])
                 melody[z]= random.choice(mutaterangecopy,1)[0]
 
-            currentscore = fitness(melody)
+            currentscore = fit.function(melody)
             if currentscore >= bestscore:
                 bestscore = currentscore
                 bestmelody = list(melody)
@@ -39,7 +44,7 @@ def mutateRandom(mlength=12, nrOfTones=11):
 
     return {'progress': progress, 'bestmelody': bestmelody}
 
-def mutate(notelist, mlength=12, nrOfTones=11):
+def mutate(notelist, mlength=12, nrOfTones=12):
 
    # instantiate some necessary variables
     bestscore = 0
@@ -62,7 +67,7 @@ def mutate(notelist, mlength=12, nrOfTones=11):
                 mutaterangecopy.remove(melody[z])
                 melody[z]= random.choice(mutaterangecopy,1)[0]
 
-            currentscore = fitness(melody)
+            currentscore = fit.function(melody)
             if currentscore >= bestscore:
                 bestscore = currentscore
                 bestmelody = list(melody)

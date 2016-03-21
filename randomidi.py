@@ -1,5 +1,4 @@
 import os
-import mido
 from mido import MidiFile, MidiTrack, Message
 import random
 
