@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+"""
+Based on code from Jordy Thielen
+Extracts characteristics from folk music from the Music21 corpus, and saves these characteristics in a csv file
+"""
+
+import generator
+import os
+import csv
+
+## Variables/Parameters 
+modelType = 'firstOrder'    #existing model types: 'flat', 'firstOrder', TODO: create: 'secondOrder', 'prior', 'start', 'end'
+dataSet = 'folk'            #'allFolk', 'folk', 'essenFolk', 'bach'
+directory = 'C:\\Users\\diede\\Documents\\Study\\Master AI\\MusicCognition\\Project\\Data\\'+dataSet+'\\'+modelType+'\\'
+
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
+## Generate specified frequency data for the specified dataset
+gen = generator.Generator(modelType, dataSet)
+distribution = gen.generateDistribution()
+
+# Write data to csv file
+csvfile = directory+'distribution.csv'
+with open(csvfile, "w") as output:
+    writer = csv.writer(output, lineterminator='\n')
+    writer.writerows(distribution)
