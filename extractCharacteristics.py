@@ -25,8 +25,3 @@ csvfile = directory+'distribution.csv'
 with open(csvfile, "w") as output:
     writer = csv.writer(output, lineterminator='\n')
     writer.writerows(distribution)
-
-csvfile= directory+'distribution.csv'
-with open (csvfile) as csvin:
-    x = csv.reader(csvin)
-    y = np.asarray([list(map(float, z)) for z in x])

@@ -8,7 +8,7 @@ from numpy import random
 import fitness
 
 #variables! Select type of fitness + which dataset
-modelType = 'firstOrder'
+modelType = 'secondOrder'
 dataSet = 'folk'
 fit = fitness.Fitness(modelType,dataSet)
 

@@ -68,15 +68,15 @@ def apply_mutation(mutantnotelist, midino, snote=50, time=150, filename='random'
     # add the octaves back
     mutantnotelist2 = [x+snote for x in mutantnotelist]
     
-    for note in mutantnotelist2[:10]:
+    for note in mutantnotelist2[:len(mutantnotelist2)-2]:
         
         #print(note)
         
         track.append(Message('note_on', note=int(note), velocity = 127, time=time))
         track.append(Message('note_off', note=int(note), velocity = 127, time=time))
         
-    track.append(Message('note_on', note=mutantnotelist2[11], velocity = 127, time=time))
-    track.append(Message('note_off', note=mutantnotelist2[11], velocity = 127, time=500))
+    track.append(Message('note_on', note=mutantnotelist2[len(mutantnotelist2)-1], velocity = 127, time=time))
+    track.append(Message('note_off', note=mutantnotelist2[len(mutantnotelist2)-1], velocity = 127, time=500))
         
         
     mid.save('mutantmusic/' + filename + str(midino) + '.mid')
@@ -104,7 +104,7 @@ def read_midi(midiname, snote=50):
 
 if __name__ == "__main__":
 
-    mlength = 11
+    mlength = 12
     snote = 50 # starting note
     numofmidi = 10 # number of midi files
     time = 150
