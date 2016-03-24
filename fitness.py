@@ -2,18 +2,27 @@
     Fitness, class that computes the fitness of a melody, based on different fitness functions
 
 '''
-
+import platform
 import pandas as pd
 
 class Fitness:
 
-    directory = 'data\\'
+    if platform.system() == 'Darwin' or platform.system() == 'Linux':
+        #print(platform.system())
+        global fs
+        fs = '/'
+    else:
+        #print(platform.system())
+        global fs
+        fs = '\\'
+
+    directory = 'data' + fs
     filename = 'distribution.csv'
 
     def __init__(self, modelType, dataSet):
         self.modelType = modelType #existing model types: 'flat', 'firstOrder', TODO: create: 'secondOrder', 'prior', 'start', 'end'
         self.dataSet = dataSet #'allFolk', 'folk', 'essenFolk', 'bach'
-        self.file = self.directory+dataSet+'\\'+modelType+'\\'+self.filename  #directory to data used for fitness computation
+        self.file = self.directory + dataSet+ fs +modelType+ fs +self.filename  #directory to data used for fitness computation
 
         #read in data
         df = pd.read_csv(self.file, sep=',', header=None)

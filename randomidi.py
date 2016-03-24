@@ -41,12 +41,12 @@ def generate_random(snote=50, mlength=12, numofmidi=10, time=150, filename='rand
                 if i == (pitchnote+numofpnote): # Change the pitch back to default
                     track.append(Message('pitchwheel'))
         
-            track.append(Message('note_on', note=note, time=time))
-            track.append(Message('note_off', note=note, time=time))
+            track.append(Message('note_on', note=note, velocity = 127, time=time))
+            track.append(Message('note_off', note=note, velocity = 127, time=time))
             
         note = random.choice(notes)
-        track.append(Message('note_on', note=note, time=time))
-        track.append(Message('note_off', note=note, time=500))
+        track.append(Message('note_on', note=note, velocity = 127, time=time))
+        track.append(Message('note_off', note=note, velocity = 127, time=500))
         
 
         mid.save('music/' + filename + str(j) + '.mid')
@@ -72,11 +72,11 @@ def apply_mutation(mutantnotelist, midino, snote=50, time=150, filename='random'
         
         #print(note)
         
-        track.append(Message('note_on', note=int(note), time=time))
-        track.append(Message('note_off', note=int(note), time=time))
+        track.append(Message('note_on', note=int(note), velocity = 127, time=time))
+        track.append(Message('note_off', note=int(note), velocity = 127, time=time))
         
-    track.append(Message('note_on', note=mutantnotelist2[11], time=time))
-    track.append(Message('note_off', note=mutantnotelist2[11], time=500))
+    track.append(Message('note_on', note=mutantnotelist2[11], velocity = 127, time=time))
+    track.append(Message('note_off', note=mutantnotelist2[11], velocity = 127, time=500))
         
         
     mid.save('mutantmusic/' + filename + str(midino) + '.mid')
