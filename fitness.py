@@ -60,6 +60,7 @@ class Fitness:
         fitness = 0
         for x in range(2,len(melody)-1):
             fitness = fitness + newData[melody[x-2]][melody[x-1]][melody[x]]
+        return fitness
 
     # Huron, page 87 --> average pitch height for melodies of 12 tones.
     #averagePitchHeight = [6.7, 7.9, 8.4, 8.5, 8.5, 8.3, 8.5, 8.6, 8.3, 8.0, 7.6, 6.4]
