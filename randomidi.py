@@ -5,122 +5,123 @@ import random
 import geneticalgorithm as ga
 
 
-def generate_random(snote=50, mlength=12, numofmidi=10, pitchrnd=False, timernd=False):
+def generate_random(snote=50, mlength=12, numofmidi=10, time=150, filename='random', pitchrnd=False):
     
-	notes = range(snote, snote+mlength)
-	times = range(50,300)
-	time = 100 
+    notes = range(snote, snote+mlength)
+    
+    noterange = range(mlength)
 
-	noterange = range(mlength)
+    # pitch range for random pitch value ;
+    pitches = range(-8192,8191)
+    
+    # Create music folder if it does not exist
+    if not os.path.exists('music'):
+        os.makedirs('music')
 
-	# pitch range for random pitch value ;
-	pitches = range(-8192,8191)
+    for j in range(numofmidi):
     
-	# Create music folder if it does not exist
-	if not os.path.exists('music'):
-		os.makedirs('music')
+        mid = MidiFile(type=0) # type0 can have only one track
+    
+        track = MidiTrack() # note list (kind of)
 
-	for j in range(numofmidi):
+        mid.tracks.append(track)
     
-		mid = MidiFile(type=0) # type0 can have only one track
+        # the note which the pitch will change for
+        pitchnote = random.choice(noterange)
+        numofpnote = random.choice(noterange)
     
-		track = MidiTrack() # note list (kind of)
-
-		mid.tracks.append(track)
-    
-		# the note which the pitch will change for
-		pitchnote = random.choice(noterange)
-    
-		for i in noterange:
-
-			note = random.choice(notes)
-			pitch = random.choice(pitches)
+        for i in noterange:
+        
+            note = random.choice(notes)
+            pitch = random.choice(pitches)
+        
+            if pitchrnd:
+                if i == pitchnote: # Change the pitch on the note
+                    track.append(Message('pitchwheel', pitch=pitch))
+                if i == (pitchnote+numofpnote): # Change the pitch back to default
+                    track.append(Message('pitchwheel'))
+        
+            track.append(Message('note_on', note=note, time=time))
+            track.append(Message('note_off', note=note, time=time))
             
-			if timernd:
-				time = random.choice(times)
-        
-			if pitchrnd:
-				# Change the pitch for only one note
-				if i == pitchnote: # Change the pitch on third note
-					track.append(Message('pitchwheel', pitch=pitch))
-				if i == (pitchnote +1): # Change the pitch back to default
-					track.append(Message('pitchwheel'))
-        
-			track.append(Message('note_on', channel=0, note=note, time=time))
-			track.append(Message('note_off', channel=0, note=note, time=time))
+        note = random.choice(notes)
+        track.append(Message('note_on', note=note, time=time))
+        track.append(Message('note_off', note=note, time=500))
         
 
-			mid.save('music/random' + str(j) + '.mid')
+        mid.save('music/' + filename + str(j) + '.mid')
 
 
 
-def apply_mutation(mutantnotelist, midino, snote=50):
+def apply_mutation(mutantnotelist, midino, snote=50, time=150, filename='random'):
 
-	mid = MidiFile(type=0) # type0 can have only one track
+    mid = MidiFile(type=0) # type0 can have only one track
     
-	track = MidiTrack() # note list (kind of)
+    track = MidiTrack() # note list (kind of)
 
-	mid.tracks.append(track)
+    mid.tracks.append(track)
     
-	time = 100
+    # Create mutant music folder if it does not exist
+    if not os.path.exists('mutantmusic'):
+        os.makedirs('mutantmusic')
     
-	# Create mutant music folder if it does not exist
-	if not os.path.exists('mutantmusic'):
-		os.makedirs('mutantmusic')
+    # add the octaves back
+    mutantnotelist2 = [x+snote for x in mutantnotelist]
     
-	# add the octaves back
-	mutantnotelist2 = [x+snote for x in mutantnotelist]
-	
-	for note in mutantnotelist2:
+    for note in mutantnotelist2[:10]:
         
-		#print(note)
+        #print(note)
         
-		track.append(Message('note_on', channel=0, note=int(note), time=time))
-		track.append(Message('note_off', channel=0, note=int(note), time=time))
+        track.append(Message('note_on', note=int(note), time=time))
+        track.append(Message('note_off', note=int(note), time=time))
+        
+    track.append(Message('note_on', note=mutantnotelist2[11], time=time))
+    track.append(Message('note_off', note=mutantnotelist2[11], time=500))
         
         
-	mid.save('mutantmusic/random' + str(midino) + '.mid')
+    mid.save('mutantmusic/' + filename + str(midino) + '.mid')
 
 
 
-def read_midi(filename, snote=50):
+def read_midi(midiname, snote=50):
     
-	mid = MidiFile(filename)
+    mid = MidiFile(midiname)
     
-	noteonlist = []
-	for i, track in enumerate(mid.tracks):
-		#print('Track {}: {}'.format(i, track.name))
-		for message in track:
-			#print(message)
-			if message.type == 'note_on':
-				noteonlist.append(message.note)
+    noteonlist = []
+    for i, track in enumerate(mid.tracks):
+        #print('Track {}: {}'.format(i, track.name))
+        for message in track:
+            #print(message)
+            if message.type == 'note_on':
+                noteonlist.append(message.note)
     
-	# normalize the note integers for mutation by reducing octaves
-	notelist = [x-snote for x in noteonlist]
+    # normalize the note integers for mutation by reducing octaves
+    notelist = [x-snote for x in noteonlist]
     
-	return notelist
+    return notelist
 
 
 
 if __name__ == "__main__":
 
-	mlength = 12
-	snote = 50 # starting note
-	numofmidi = 10 # number of midi files
+    mlength = 11
+    snote = 50 # starting note
+    numofmidi = 10 # number of midi files
+    time = 150
+    filename='random'
+    pitchrnd=False # do not include pitch variations for now
 
-	pitchrnd = False # do not include pitch variations for now
-	timernd = False # do not include time variations for now
+    generate_random(snote, mlength, numofmidi, time, filename, pitchrnd)
 
-	generate_random(snote, mlength, numofmidi, pitchrnd, timernd)
+    for j in range(numofmidi):
+    
+        midiname = 'music/' + filename + str(j) + '.mid'
+    
+        notelist = read_midi(midiname)
+    
+        mutantnotelist = ga.mutate(notelist, mlength)
+    
+        apply_mutation(mutantnotelist, j, snote, time, filename)
+        
 
-	for j in range(numofmidi):
-    
-		midiname = 'music/random' + str(j) + '.mid'
-    
-		notelist = read_midi(midiname, snote)
-    
-		mutantnotelist = ga.mutate(notelist, mlength)
-    
-		apply_mutation(mutantnotelist, j, snote)
-
-	print('Midi files are created. Please check the "music" and “mutantmusic” folder')
+    print('Midi files are created. Please check the "music" and “mutantmusic” folder')
