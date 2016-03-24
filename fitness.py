@@ -33,6 +33,8 @@ class Fitness:
             return self.computeFlatFitness(melody)
         elif self.modelType == 'firstOrder':
             return self.computeFirstOrderFitness(melody)
+        elif self.modelType == 'secondOrder':
+            return self.computeSecondOrderFitness(melody)
         else:
             print('Class Fitness: modelType is not recognized.')
 
@@ -47,6 +49,17 @@ class Fitness:
             fitness= fitness + self.data[melody[x - 1]][melody[x]]
         return fitness
 
+    def computeSecondOrderFitness(self,melody):
+        #self.data contains second order probability table: 144x12
+        #reshape it into shape 12x12x12 [firstNote][secondNote][thirdNote]
+        rows = 12
+        cols = 12
+        newData = [self.data[cols*i : cols*(i+1)] for i in range(rows)]
+
+        #compute fitness score
+        fitness = 0
+        for x in range(2,len(melody)-1):
+            fitness = fitness + newData[melody[x-2]][melody[x-1]][melody[x]]
 
     # Huron, page 87 --> average pitch height for melodies of 12 tones.
     #averagePitchHeight = [6.7, 7.9, 8.4, 8.5, 8.5, 8.3, 8.5, 8.6, 8.3, 8.0, 7.6, 6.4]
